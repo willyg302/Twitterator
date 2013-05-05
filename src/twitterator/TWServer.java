@@ -10,9 +10,12 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.server.session.SessionHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.log.StdErrLog;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Password;
+import org.h2.server.web.WebServlet;
 
 /**
  * Our custom server, using Jetty.
@@ -68,6 +71,21 @@ public class TWServer {
 
         return csh;
     }
+    
+    /**
+     * Gets a servlet handler that maps the H2 Console to the /console URL path.
+     * This allows us to remotely query databases through our console!
+     * 
+     * Don't forget to set -webAllowOthers = true for remote connections!
+     */
+    private ServletContextHandler getH2ConsoleHandler() {
+        ServletContextHandler console = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        console.setContextPath("/");
+        ServletHolder sh = new ServletHolder(new WebServlet());
+        sh.setInitParameter("-webAllowOthers", "true");
+        console.addServlet(sh, "/console/*");
+        return console;
+    }
 
     private void configure() {
         // Turn off jetty logging (it likes to warn too much)
@@ -77,9 +95,13 @@ public class TWServer {
 
         website = new Server(WEBSITE_PORT);
 
-        // List of handlers, called in order (resource first, then AJAX)
+        // List of handlers, called in order (console, then resource, then AJAX)
         HandlerList handlers = new HandlerList();
-        handlers.setHandlers(new Handler[]{this.getResourceHandler(), new TWHandler()});
+        handlers.setHandlers(new Handler[]{
+            this.getH2ConsoleHandler(),
+            this.getResourceHandler(),
+            new TWHandler()
+        });
 
         // Wrap a security handler around our site next
         ConstraintSecurityHandler csh = this.getConstraintSecurityHandler();
