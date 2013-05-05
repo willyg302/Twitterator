@@ -51,7 +51,7 @@ public class TWHandler extends DefaultHandler {
         response.setHeader("Cache-Control", "no-cache");
         response.setStatus(HttpServletResponse.SC_OK);
         
-        XMLResponse xmlr = new XMLResponse();
+        XMLResponse xmlr = new XMLResponse("startup");
         xmlr.addLMPair("username", user);
         xmlr.addLMPair("dblist", tu.getHTMLFormattedDBList());
         
@@ -97,7 +97,7 @@ public class TWHandler extends DefaultHandler {
         response.setHeader("Cache-Control", "no-cache");
         response.setStatus(HttpServletResponse.SC_OK);
         
-        XMLResponse xmlr = new XMLResponse();
+        XMLResponse xmlr = new XMLResponse("omnibox");
         xmlr.addLMPair("prompt", resp);
         // Auto-update DB list if it was changed
         if (action.equals("createDB")) {

@@ -30,6 +30,9 @@ var db = -1; // Only true if they need DB (index)
 // They can still remove though (invalidates submit)
 var allowSubmit = false;
 
+// User presses submit, is waiting for Twitterator to say something back (LOCK)
+var awaitingFeedback = false;
+
 $(function() {
     restart();
     notifyUser("Type into the field below!", "success");
@@ -166,10 +169,18 @@ function inArrayCI(array, str) {
     return (indexOfCaseInsensitive(array, str) != -1);
 }
 
+// Completely lock omnibox while awaiting Twitterator feedback
+function beforeRemoved(event, ui) {
+    if (awaitingFeedback) {
+        return false;
+    }
+    return true;
+}
+
 // Called just BEFORE a tag will be added (what do we want to PREVENT adding?)
 function beforeAdded(event, ui) {
     // Locked in (cannot add because of allowSubmit)
-    if (allowSubmit) {
+    if (allowSubmit || awaitingFeedback) {
         return false;
     }
 
@@ -240,9 +251,11 @@ function reloadTagit(tags) {
         singleFieldNode: $('#inputField'),
         afterTagAdded: afterAdded,
         afterTagRemoved: afterRemoved,
-        beforeTagAdded: beforeAdded
+        beforeTagAdded: beforeAdded,
+        beforeTagRemoved: beforeRemoved
     });
 }
+
 
 // Where level is one of: success, warning, error
 function notifyUser(msg, level, append) {
@@ -267,12 +280,19 @@ function restart() {
     prompt = null;
     db = -1;
     allowSubmit = false;
+    awaitingFeedback = false;
     reloadTagit(actionTags);
+    notifyUser("", "success");
     findThingToDo();
 }
 
 // Called when user hits the submit button
 function submitInput() {
+    // Already waiting for feedback? Don't do anything!
+    if (awaitingFeedback) {
+        return;
+    }
+    
     if (!allowSubmit) {
         if (action == -1) {
             notifyUser("You must enter an action to take!", "error");
@@ -283,17 +303,19 @@ function submitInput() {
         }
         return;
     }
-    notifyUser("Submitting input to Twitterator...", "success");
     
+    awaitingFeedback = true;
+    notifyUser("Submitting input to Twitterator&nbsp;<img src=img/loader.gif width=16 height=16>", "success");
     sendPrompt(serverActs[action], prompt, dbTags[db]);
-
-    // We should really lock everything until the server sends a reply...then do the lines below
-
-    
-    $("#omniField").tagit("removeAll");
-    restart();
 }
 
+function handleCallback(key) {
+    if (key == "omnibox") {
+        awaitingFeedback = false;
+        $("#omniField").tagit("removeAll");
+        restart();
+    }
+}
 
 
 /**
@@ -314,7 +336,8 @@ function ajaxPoll(value) {
 }
 
 function ajaxCallback(req) {
-    if (req.readyState == 4 && req.status == 200 && req.getResponseHeader("Content-Type").indexOf("xml") != -1) {
+    if (req.readyState == 4 && req.status == 200) {
+        var key = req.responseXML.getElementsByTagName("key")[0].childNodes[0].nodeValue;
         var locations = req.responseXML.getElementsByTagName("location");
         var messages = req.responseXML.getElementsByTagName("message");
         for (var i = 0; i < locations.length; i++) {
@@ -322,6 +345,7 @@ function ajaxCallback(req) {
             var message = messages[i].childNodes[0].nodeValue;
             document.getElementById(location).innerHTML = message;
         }
+        handleCallback(key);
     }
 }
 

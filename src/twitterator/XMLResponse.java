@@ -10,8 +10,8 @@ package twitterator;
 public class XMLResponse {
     private String str;
     
-    public XMLResponse() {
-        str = "<doc>";
+    public XMLResponse(String key) {
+        str = "<doc><key>" + key + "</key>";
     }
     
     /**
