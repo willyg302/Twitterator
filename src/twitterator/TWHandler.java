@@ -42,21 +42,41 @@ public class TWHandler extends DefaultHandler {
         }
     }
     
+    private void writeXMLToResponse(HttpServletResponse response, XMLResponse xmlr) throws IOException {
+        response.setContentType("text/xml");
+        response.setHeader("Cache-Control", "no-cache");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.getWriter().write(xmlr.getString());
+        response.flushBuffer();
+    }
     
+    private void ratelimits(String user, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String resp = "<![CDATA[<h3>Rate Limits</h3>"
+                + "<p>Currently work-in-progress.</p>"
+                + "<p><code>This is a response from the server</code></p>]]>";
+        
+        XMLResponse xmlr = new XMLResponse("ratelimits");
+        xmlr.addLMPair("ratelimits-content", resp);
+        writeXMLToResponse(response, xmlr);
+    }
+    
+    private void currentjobs(String user, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String resp = "<![CDATA[<h3>Current Jobs</h3>"
+                + "<p>Currently work-in-progress.</p>"
+                + "<p><code>This is a response from the server</code></p>]]>";
+        
+        XMLResponse xmlr = new XMLResponse("currentjobs");
+        xmlr.addLMPair("currentjobs-content", resp);
+        writeXMLToResponse(response, xmlr);
+    }
     
     private void startup(String user, HttpServletRequest request, HttpServletResponse response) throws IOException {
         Twitterator.logTime("User " + user + " has logged in");
         
-        response.setContentType("text/xml");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setStatus(HttpServletResponse.SC_OK);
-        
         XMLResponse xmlr = new XMLResponse("startup");
         xmlr.addLMPair("username", user);
         xmlr.addLMPair("dblist", tu.getHTMLFormattedDBList());
-        
-        response.getWriter().write(xmlr.getString());
-        response.flushBuffer();
+        writeXMLToResponse(response, xmlr);
     }
     
     private void logout(String user, HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -93,19 +113,13 @@ public class TWHandler extends DefaultHandler {
         String resp = tu.handle(action, prompt, db);
         //System.out.println(resp);
         
-        response.setContentType("text/xml");
-        response.setHeader("Cache-Control", "no-cache");
-        response.setStatus(HttpServletResponse.SC_OK);
-        
         XMLResponse xmlr = new XMLResponse("omnibox");
         xmlr.addLMPair("prompt", resp);
         // Auto-update DB list if it was changed
         if (action.equals("createDB")) {
             xmlr.addLMPair("dblist", tu.getHTMLFormattedDBList());
         }
-        
-        response.getWriter().write(xmlr.getString());
-        response.flushBuffer();
+        writeXMLToResponse(response, xmlr);
     }
 
     @Override

@@ -1,15 +1,10 @@
-/***************************************
- * TITLE: Prosimii Screen Stylesheet   * 
- * URI  : prosimii/prosimii-screen.css *
- * MODIF: 2004-Apr-28 21:43 +0800      *
- ***************************************/
-
+/* Originally Prosimii Screen Stylesheet by Haran (MODIF: 2004-Apr-28) */
 
 /* ##### Common Styles ##### */
 
 body {
     font-family: verdana, helvetica, arial, sans-serif;
-    font-size: 73%;  /* Enables font size scaling in MSIE */
+    font-size: 73%;
     margin: 0;
     padding: 0;
 }
@@ -222,127 +217,10 @@ dd {
     padding: 0;
 }
 
-.newsHeading {
-    color: rgb(61,92,122);
-    background-color: transparent;
-    font-family: "trebuchet ms", verdana, helvetica, arial, sans-serif;
-    font-size: 145%;
-    text-decoration: none;
-    margin: 0;
-    padding: 1ex 0 0 0;
-    display: block;
-}
-
-.newsHeading:hover {
-    color: rgb(117,144,174);
-    background-color: transparent;
-    text-decoration: underline;
-}
-
-.newsDate {
-    font-style: italic;
-    margin: 0 !important;
-    padding: 0;
-}
-
-.newsSummary {
-    margin: 1.5ex 0 2.5ex 0.75ex !important;
-    padding: 0;
-}
-
-.more {
-    text-align: right;
-    margin: 0;
-    padding: 0.5em 0;
-}
-
-.more a {
-    color: rgb(61,92,122);
-    background-color: transparent;
-    font-size: 92%;
-    text-decoration: underline;
-    margin: 0;
-    padding: 0.25ex 0.75ex;
-}
-
-.more a:hover {
-    color: rgb(117,144,174);
-    text-decoration: none;
-}
-
-.rowOfBoxes {
-    clear: both;
-}
-
 .omnibox {
     padding: 0.5% 0.5%;
 }
 
-.quarter, .oneThird, .half, .twoThirds, .threeQuarters, .fullWidth {
-    margin: 1em 0;
-    float: left;
-    border-left: 1px solid rgb(204,204,204);
-}
-
-.quarter {
-    width: 21%;
-    padding: 0 1.9%;
-}
-
-.oneThird {
-    width: 28%;
-    padding: 0 1.9%;
-}
-
-.half {
-    text-align: justify;
-    width: 46%;
-    padding: 0 1.9%;
-}
-
-.twoThirds {
-    text-align: justify;
-    width: 63%;
-    padding: 0 1.9%;
-}
-
-.threeQuarters {
-    text-align: justify;
-    width: 71%;
-    padding: 0 1.9%;
-}
-
-.fullWidth {
-    text-align: justify;
-    width: 96%;
-    padding: 0 1.2em;
-    border-left: none;
-}
-
-.filler {  /* use with an empty <p> element to add padding to the end of a text box */
-    border: 1px solid white;
-}
-
-.noBorderOnLeft {
-    border-left: none;
-}
-
-.dividingBorderAbove {
-    border-top: 1px solid rgb(204,204,204);
-}
-
-/* More elegant alternatives to .noBorderOnLeft & .dividingBorderAbove
- * that don't require the creation of new classes - but which are not
- * supported by MSIE - are the following:
- *
- * .rowOfBoxes > div:first-child {
- *   border-left: none;
- * }
- *
- * .rowOfBoxes + .rowOfBoxes {
- *   border-top: 1px solid rgb(204,204,204);
- * }
-*/
 
 
 /* ##### Footer ##### */
@@ -384,11 +262,73 @@ dd {
 
 
 
-div.sdivContainer {
-    border: 0px; /*1px solid #444;*/
+div.logcontainer {
+    border: 0px;
     margin:10px 0px 10px 0px;
     padding: 10px;
     background-color: #f0f0f0;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
 }
+
+
+
+/* STUFF BELOW ORIGINALLY FROM TEST.CSS */
+
+
+ul.tagit input[type="text"] {
+    font-size: 32px;
+}
+
+ul.tagit li.tagit-choice {
+    font-size: 32px;
+    line-height: 32px;
+}
+
+ul.tagit li.tagit-choice:hover, ul.tagit li.tagit-choice.remove {
+    background-color: #bbcef1;
+    border-color: #6d95e0;
+}
+
+/* Alert Messages */
+
+.alert-msg{display:block; position:relative; /*margin:15px 0;*/ padding:18px 40px 17px 20px; border:1px solid #F00000; color:inherit; font-size:1.4em;}
+.alert-msg a{background-color:transparent;}
+.alert-msg.info{border-color:#A8A8A8;}
+.alert-msg.warning{background-color:#FEE794; border-color:#FDC703;}
+.alert-msg.success{background-color:#C2E4CD; border-color:#76C38F;}
+.alert-msg.error{background-color:#F3CBCC; border-color:#D54346;}
+
+.rnd8, .list.tagcloud.rnd8 a, form.rnd8 input, form.rnd8 textarea{-moz-border-radius:8px; -webkit-border-radius:8px; border-radius:8px;}
+
+/* Better looking link */
+a{color:#FF9900; outline:none; text-decoration:none;}
+
+/* Buttons */
+
+.button{display:inline-block; border:1px solid; font-weight:bold; text-transform:uppercase;}
+
+.button.small{font-size:.9em; padding:6px 15px 5px 15px;}
+.button.medium{font-size:1.1em; padding:10px 20px 9px 20px;}
+.button.large{font-size:1.4em; font-weight:normal; padding:18px 20px 17px 20px;}
+
+.button.blue{color:#FFFFFF; background-color:#56AED4; border-color:#287A9D;}
+.button.blue:hover{color:#56AED4; background-color:#1C546C; border-color:#56AED4;}
+
+.button.green{color:#FFFFFF; background-color:#C0E079; border-color:#98BA55;}
+.button.green:hover{color:#7C9B41; background-color:#98BA55; border-color:#7C9B41;}
+
+
+/* MODAL Stuff */
+
+#ratelimits-content {display:none;}
+#currentjobs-content {display:none;}
+#simplemodal-overlay {background-color:#000;}
+
+/* Container */
+#simplemodal-container {height:360px; width:600px; color:#bbb; background-color:#333; border:4px solid #444; padding:12px; font: 12px/22px verdana, arial, sans-serif;}
+#simplemodal-container .simplemodal-data {padding:8px;}
+#simplemodal-container code {background:#141414; border-left:3px solid #65B43D; color:#bbb; display:block; font-size:12px; margin-bottom:12px; padding:4px 6px 6px;}
+#simplemodal-container a {color:#ddd;}
+#simplemodal-container a.modalCloseImg {background:url(../img/x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
+#simplemodal-container h3 {color:#84b8d9; font-size:22px; line-height:26px; font-weight:normal; margin:0 0 8px 0;}

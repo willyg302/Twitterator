@@ -2,10 +2,9 @@
 <html>
     <head>
         <title>Twitterator</title>
-        <link rel="stylesheet" type="text/css" href="css/prosimii-screen.css">
+        <link rel="stylesheet" type="text/css" href="css/twitterator.css">
         <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
         <link rel="stylesheet" type="text/css" href="css/jquery.tagit.css">
-        <link rel="stylesheet" type="text/css" href="css/test.css">
         <link href="data:image/x-icon;base64,AAABAAEAEBAQAAAAAAAoAQAAFgAAACgAAAAQAAAAIAAAAAEABAAAAAAAgAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAADMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAREREQARERARERERABEREREREREAEREREREQAQARERERERABABEREREREAEAABEREREQAQAAERERERABABEREREREAEAEREREREQAQAAABERERABAAAAEREREAEREREREQAAAAARERERAAAAABERERERERERERERARERERERERCAwQAAAMAAAADAAAAGwAAABsAAAAbwAAAG8AAABsAAAAbAAAAG/AAABvwAAAYAAAA/wAAAP8AAAAAAAACAAQAA" rel="icon" type="image/x-icon" />
         
         <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
@@ -16,24 +15,17 @@
         <script src="js/twitterator.js"></script>
     </head>
     <body onload="startup()">
-
-        <!-- ##### Header ##### -->
-
         <div id="header">
             <div class="superHeader"><span><a href="http://manoa.hawaii.edu/hichi/index.html">HICHI Website</a></span></div>
             <div class="midHeader">
                 <h1 class="headerTitle">Twitterator</h1>
-                <div class="headerSubTitle" title="Made by William Gaul and Michael Terada">
-                    A HICHI Project
-                </div>
+                <div class="headerSubTitle" title="Made by William Gaul and Michael Terada">A HICHI Project</div>
             </div>
             <div class="subHeader">
-                Logged in as <font color="lightgreen"><b><span id="username">username</span></b></font> &raquo; <a href="bogus.html?query=logout">Log out</a>
+                Logged in as <font color="lightgreen"><b><span id="username">username</span></b></font> &raquo;
+                <a href="bogus.html?query=logout">Log out</a>
             </div>
         </div>
-
-        <!-- ##### Our Main Form ##### -->
-
         <div id="main-copy">
             <div class="omnibox">
                 <table width="100%">
@@ -47,19 +39,12 @@
                     </tr>
                 </table>
                 <form>
-                    <p>
-                        <input name="tags" id="inputField" disabled="disabled" hidden="hidden">
-                    </p>
+                    <p><input name="tags" id="inputField" disabled="disabled" hidden="hidden"></p>
                     <ul id="omniField"></ul>
                 </form>
                 <!--List of DBs that we cache here and update in JavaScript-->
                 <div id="dblist" hidden="hidden">test</div>
-
-
-                <!--Our WebSocket feed-->
-                <div id="sdivChat" class="sdivContainer"
-                     style="position:relative; height:300px; overflow:auto;">
-                </div>
+                <div id="logbox" class="logcontainer" style="position:relative; height:300px; overflow:auto;"></div>
             </div>
             
             <div style="font-size:20px;text-align:center">
@@ -67,18 +52,8 @@
                 <span id="currentjobs"><a href='javascript:void(0);' class='basic'>Current Jobs</a></span>
             </div>
             
-            
-            <div id="ratelimits-content">
-                <h3>Rate Limits</h3>
-                <p>Currently work-in-progress.</p>
-                <p><code>This is a code element</code></p>
-            </div>
-            
-            <div id="currentjobs-content">
-                <h3>Current Jobs</h3>
-                <p>Currently work-in-progress.</p>
-                <p><code>This is a code element</code></p>
-            </div>
+            <div id="ratelimits-content"></div>
+            <div id="currentjobs-content"></div>
             
             <script>printFooter();</script>
         </div>

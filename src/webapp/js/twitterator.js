@@ -38,11 +38,19 @@ $(function() {
     notifyUser("Type into the field below!", "success");
     
     $('#ratelimits .basic').click(function(e) {
-        $('#ratelimits-content').modal();
+        $('#ratelimits-content').modal({
+            onShow: function(dialog) {
+                ajaxPoll("ratelimits");
+            }
+        });
         return false;
     });
     $('#currentjobs .basic').click(function(e) {
-        $('#currentjobs-content').modal();
+        $('#currentjobs-content').modal({
+            onShow: function(dialog) {
+                ajaxPoll("currentjobs");
+            }
+        });
         return false;
     });
     
