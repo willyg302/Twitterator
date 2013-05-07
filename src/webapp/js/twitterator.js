@@ -36,6 +36,16 @@ var awaitingFeedback = false;
 $(function() {
     restart();
     notifyUser("Type into the field below!", "success");
+    
+    $('#ratelimits .basic').click(function(e) {
+        $('#ratelimits-content').modal();
+        return false;
+    });
+    $('#currentjobs .basic').click(function(e) {
+        $('#currentjobs-content').modal();
+        return false;
+    });
+    
 });
 
 // Called just after a tag has been added

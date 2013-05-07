@@ -11,6 +11,7 @@
         <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="js/jquery.simplemodal.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/tag-it.js" type="text/javascript" charset="utf-8"></script>
         <script src="js/twitterator.js"></script>
     </head>
@@ -60,7 +61,25 @@
                      style="position:relative; height:300px; overflow:auto;">
                 </div>
             </div>
-
+            
+            <div style="font-size:20px;text-align:center">
+                <span id="ratelimits"><a href='javascript:void(0);' class='basic'>Rate Limits</a></span> |
+                <span id="currentjobs"><a href='javascript:void(0);' class='basic'>Current Jobs</a></span>
+            </div>
+            
+            
+            <div id="ratelimits-content">
+                <h3>Rate Limits</h3>
+                <p>Currently work-in-progress.</p>
+                <p><code>This is a code element</code></p>
+            </div>
+            
+            <div id="currentjobs-content">
+                <h3>Current Jobs</h3>
+                <p>Currently work-in-progress.</p>
+                <p><code>This is a code element</code></p>
+            </div>
+            
             <script>printFooter();</script>
         </div>
     </body>
