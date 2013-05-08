@@ -33,7 +33,11 @@ var allowSubmit = false;
 // User presses submit, is waiting for Twitterator to say something back (LOCK)
 var awaitingFeedback = false;
 
+// A utility variable for our log
+var logBox = null;
+
 $(function() {
+    logBox = document.getElementById("logbox");
     restart();
     notifyUser("Type into the field below!", "success");
     
@@ -324,17 +328,21 @@ function submitInput() {
     
     awaitingFeedback = true;
     notifyUser("Submitting input to Twitterator&nbsp;<img src=img/loader.gif width=16 height=16>", "success");
+    logUser(actionTags[action] + " " + prompt + " " + dbTags[db]);
     sendPrompt(serverActs[action], prompt, dbTags[db]);
 }
 
 function handleCallback(key) {
+    // ISSUE: this still overrides the prompt box's information...
     if (key == "omnibox") {
+        var np = document.getElementById("prompt").innerHTML;
         awaitingFeedback = false;
         $("#omniField").tagit("removeAll");
         restart();
+        logTwitterator(np);
+        document.getElementById("prompt").innerHTML = np;
     }
 }
-
 
 /**
  * Regular HTTP AJAX stuff follows, with XML response protocol.
@@ -373,4 +381,20 @@ function startup() {
 
 function sendPrompt(action, prompt, db) {
     ajaxPoll("omnibox&action=" + action + "&prompt=" + prompt + "&db=" + db);
+}
+
+function logTwitterator(aString) {
+    log("[" + new Date().toLocaleTimeString() + "] <b><font color=\"red\">Twitterator</font></b>: " + aString);
+}
+
+function logUser(aString) {
+    var user = document.getElementById("username").innerHTML;
+    log("[" + new Date().toLocaleTimeString() + "] <b><font color=\"blue\">" + user + "</font></b>: " + aString);
+}
+
+function log(aString) {
+    logBox.innerHTML += aString + "<br>";
+    if (logBox.scrollHeight > logBox.clientHeight) {
+        logBox.scrollTop = logBox.scrollHeight - logBox.clientHeight;
+    }
 }
