@@ -8,7 +8,7 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Map;
 import twitter4j.RateLimitStatus;
-import twitterFeed.PublicStream;
+import db.PublicStream;
 
 /**
  * Utility functions for our TWHandler. This is the highest-level wrapper for
@@ -142,7 +142,7 @@ public class TWUtils {
         Twitterator.log("Searching: " + prompt);
         try {
             DB_Info.setDB(db);
-            DB_Connect.query(prompt);
+            DB_Connect.search(prompt);
             // Should somehow return searches to webpage...
             return "";
         } catch (Exception e) {

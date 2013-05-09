@@ -1,4 +1,4 @@
-package twitterFeed;
+package db;
 
 import authentication.OAuth;
 import java.util.List;

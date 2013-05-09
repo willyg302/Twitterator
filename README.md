@@ -49,7 +49,7 @@ Registering a user allows the app to make requests on behalf of the user. In the
 
 ## Build Notes
 
-Twitterator is built with Java 7.0 in NetBeans, but should also be compatible with Java 6.0. All dependencies are available in the [LIBS](https://github.com/willyg302/twitterator/tree/master/LIBS) folder.
+Twitterator is built with Java 7.0 in NetBeans, and is NOT compatible with Java 6.0. All dependencies are available in the [LIBS](https://github.com/willyg302/twitterator/tree/master/LIBS) folder.
 
 ## Credits
 

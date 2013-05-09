@@ -6,13 +6,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import org.h2.tools.Csv;
 import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
-import twitterFeed.PublicTimeline;
-import twitterFeed.Search;
 import twitterator.Twitterator;
 
 /**
@@ -32,12 +29,11 @@ public class DB_Connect {
     /**
      * The database portion of add hashtags. Currently only adds the hashtag
      * name, does not work with gather additional tags.
-     *
-     * @param hashtags
      */
-    public static void addHash(String hashtags) throws Exception {
+    public static void addHash(String hashtags) throws ClassNotFoundException, SQLException {
         Connection conn = DB_Info.getConnection();
-        DB_Interface.insertHash(conn, hashtags);
+        DB_Interface.insertHashtag(conn, hashtags);
+        conn.close();
     }
 
     /**
@@ -45,20 +41,12 @@ public class DB_Connect {
      *  - Scrapes a user's timeline
      *  - Most recent 3200 tweets
      *  - Inserts their profile into the DB
-     *
-     * Scraps a user's timeline for the most recent 3200 tweets and also inserts
-     * their profile into the database.
      */
     public static void addUser(String u) throws TwitterException, ClassNotFoundException, SQLException {
-        PublicTimeline pt = new PublicTimeline(u);
-
-        // Connect to the DB for insertion
         Connection conn = DB_Info.getConnection();
-        
-        // Add the user and their timeline (3200 tweets) to the DB
+        PublicTimeline pt = new PublicTimeline(u);
         DB_Interface.insertUser(conn, pt.getTimeline().get(0).getUser());
         DB_Interface.insertTimeline(conn, pt);
-
         conn.close();
     }
 
@@ -67,52 +55,34 @@ public class DB_Connect {
      *  - USES a 1-TO-1 RATE LIMIT
      *  - Limit is 1500 tweets or 7 days
      */
-    public static void query(String q) throws TwitterException, SQLException, ClassNotFoundException {
-        Search newQuery = new Search(q);
-
+    public static void search(String q) throws TwitterException, SQLException, ClassNotFoundException {
         Connection conn = DB_Info.getConnection();
-
-        //authentication allows a user to have up to 350 requests per hour over the normal 150
+        Search search = new Search(q);
         Twitter a = OAuth.authenticate();
-        
-        ArrayList<Long> sid = new ArrayList<Long>();
-        for (Status tweets : newQuery.getResults()) {
-            long statusID = tweets.getId();
-            //this checks for redudant statuses then inserts new ones into the DB
-            if (!(DB_Interface.exist_Status(statusID, conn))) {
-                System.out.println("Preparin new insert of status "
-                        + statusID);
-                sid.add(statusID);
-
-                /*
-                 * a.showStatus transforms a query tweet into a normal status
-                 * this takes up a rate limit this is a difficult problem to
-                 * address because scraped tweets and streamed tweets are
-                 * formatted as a normal status, but only queried tweets are
-                 * structured this way
+        for (Status status : search.getResults()) {
+            long statusID = status.getId();
+            if (!DB_Interface.statusExists(statusID, conn)) {
+                
+                /* Note: We use a.showStatus(statusID) instead of just passing
+                 * the status because only queried tweets are formatted correctly.
+                 * This takes up a rate limit and is a difficult problem to
+                 * address. @TODO: Maybe a workaround?
                  */
-
+                
                 DB_Interface.insertStatus(conn, a.showStatus(statusID));
             } else {
-                System.out.println("Status Already exists!!!!");
+                System.out.println("Search result Status already exists, skipping");
             }
         }
-
         conn.close();
-
     }
     
 
     /**
      * Connection between the streaming API to add a status into the DB.
-     *
-     * @param s the status to be inserted
-     * @throws SQLException
-     * @throws ClassNotFoundException
      */
     public static void trackerAdd(Status s) throws ClassNotFoundException, SQLException {
         Connection conn = DB_Info.getConnection();
-
         DB_Interface.insertStatus(conn, s);
         conn.close();
     }
@@ -129,16 +99,12 @@ public class DB_Connect {
      */
     public static void trackerUserAdd(long id) throws TwitterException, ClassNotFoundException, SQLException {
         Connection conn = DB_Info.getConnection();
-
-        if (!(DB_Interface.exist_User(id, conn))) {
+        if (!DB_Interface.userExists(id, conn)) {
             DB_Interface.insertUser(conn, OAuth.authenticate().showUser(id));
         } else {
             System.out.println("User already exists in database");
         }
-        
-        // @Will: Do we need this? All the other methods have it...
         conn.close();
-
     }
 
     /**
@@ -178,11 +144,6 @@ public class DB_Connect {
 
     /**
      * Generic function for exporting data.
-     *
-     * @throws ClassNotFoundException when connecting to the DB if H2 is not
-     * running
-     * @throws SQLException for invalid SQL queries
-     * @throws IOException when the specified output file is not found
      */
     public static void exportData(Export type) throws ClassNotFoundException, SQLException, IOException {
         String fileName = DB_Info.getDB();
